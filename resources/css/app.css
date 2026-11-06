@@ -1,0 +1,118 @@
+@import "tailwindcss";
+@import "./cassette.css";
+@import "./paper.css";
+
+/* Tokens. Printed things use Archivo (it has a width axis, like the condensed type on J-cards),
+   handwritten things use Gaegu. Ink colors come from the materials: tape oxide and ballpoint. */
+@theme {
+  --font-print: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-hand: "Gaegu", "Segoe Print", "Bradley Hand", "Chalkboard SE", "Comic Sans MS", cursive;
+  --color-oxide: #3a2a21;
+  --color-paper: #fdfdf9;
+  --color-biro: #2a3bd4;
+  --color-masking: #e9dba9;
+}
+
+/* The page takes the color of the tape. --field is the page, --shell the cassette plastic. */
+@theme inline {
+  --color-field: var(--field);
+  --color-field-ink: var(--field-ink);
+  --color-field-soft: var(--field-soft);
+  --color-field-line: var(--field-line);
+  --color-shell: var(--shell);
+}
+
+:root,
+[data-tape="clover"] {
+  --field: #15593a; --field-ink: #effaf3; --field-soft: #c4e8d3; --field-line: rgb(239 250 243 / 0.28);
+  --shell: #5ccb87; --shell-deep: #35a468;
+  --dots: radial-gradient(circle, rgb(255 255 255 / 0.3) 0 0.55cqw, transparent 0.6cqw) 0 0 / 4.4cqw 4.4cqw;
+}
+[data-tape="lemon"] {
+  --field: #e0ad17; --field-ink: #2a1f08; --field-soft: #4d3a0a; --field-line: rgb(42 31 8 / 0.3);
+  --shell: #ffdf4d; --shell-deep: #f0c21c;
+  --dots: linear-gradient(rgb(70 48 0 / 0.16) 0.25cqw, transparent 0.25cqw) 0 0 / 5cqw 5cqw,
+          linear-gradient(90deg, rgb(70 48 0 / 0.16) 0.25cqw, transparent 0.25cqw) 0 0 / 5cqw 5cqw;
+}
+[data-tape="cherry"] {
+  --field: #a8232b; --field-ink: #fff1ee; --field-soft: #f7cbc5; --field-line: rgb(255 241 238 / 0.3);
+  --shell: #ee4b3f; --shell-deep: #cf3128;
+  --dots: repeating-linear-gradient(135deg, rgb(255 255 255 / 0.17) 0 1.1cqw, transparent 1.1cqw 3.6cqw);
+}
+[data-tape="bluebell"] {
+  --field: #26399a; --field-ink: #eef2ff; --field-soft: #c5d1ff; --field-line: rgb(238 242 255 / 0.3);
+  --shell: #6a8dff; --shell-deep: #4a6fe3;
+  --dots: radial-gradient(circle, rgb(255 255 255 / 0.34) 0 0.9cqw, transparent 0.95cqw) 0 0 / 7cqw 7cqw,
+          radial-gradient(circle, rgb(255 255 255 / 0.2) 0 0.9cqw, transparent 0.95cqw) 3.5cqw 3.5cqw / 7cqw 7cqw;
+}
+
+@layer base {
+  html { color-scheme: light; }
+  body { transition: background-color 0.35s ease, color 0.35s ease; }
+  :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; border-radius: 4px; }
+  .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+  ::selection { background: var(--color-masking); color: var(--color-oxide); }
+  /* Grids default to one column that may shrink. Without this, a wide child stretches the column past the screen. */
+  .grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@layer components {
+  .wordmark {
+    font-family: var(--font-print);
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 1.75rem;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .link-quiet { font-weight: 600; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+  .link-quiet:hover { text-decoration-thickness: 3px; }
+
+  .hero-title {
+    font-weight: 900;
+    font-stretch: 66%;
+    font-size: clamp(3.4rem, 9vw, 6.2rem);
+    line-height: 0.9;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  .hero-title--small { font-size: clamp(2.6rem, 7vw, 4.6rem); }
+  .section-title { font-weight: 800; font-stretch: 75%; font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: 1; }
+
+  .btn-solid {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: var(--color-oxide); color: var(--color-paper);
+    font-weight: 700; font-size: 1.05rem; line-height: 1;
+    padding: 1rem 1.6rem; border-radius: 999px; border: 0; cursor: pointer;
+    box-shadow: 0 3px 0 rgb(0 0 0 / 0.3);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .btn-solid:hover { transform: translateY(1px); box-shadow: 0 2px 0 rgb(0 0 0 / 0.3); }
+  .btn-solid:active { transform: translateY(3px); box-shadow: 0 0 0 rgb(0 0 0 / 0.3); }
+  .btn-solid:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+  .btn-solid:focus-visible { outline-color: var(--color-paper); outline-offset: 3px; }
+
+  .swatch {
+    width: 2.75rem; height: 2.75rem; border-radius: 999px; cursor: pointer;
+    background: var(--sw); border: 3px solid var(--field-line);
+    box-shadow: inset 0 -4px 0 rgb(0 0 0 / 0.15);
+    transition: transform 0.12s ease, border-color 0.12s ease;
+  }
+  .swatch:hover { transform: translateY(-2px); }
+  .swatch[data-swatch="clover"] { --sw: #5ccb87; }
+  .swatch[data-swatch="lemon"] { --sw: #ffdf4d; }
+  .swatch[data-swatch="cherry"] { --sw: #ee4b3f; }
+  .swatch[data-swatch="bluebell"] { --sw: #6a8dff; }
+  .swatch[aria-pressed="true"] { border-color: var(--field-ink); }
+
+  .step { display: grid; gap: 0.4rem; align-content: start; }
+  .step__n { font-family: var(--font-hand); font-weight: 700; font-size: 3.6rem; line-height: 0.8; color: var(--field-ink); }
+  .step__title { font-weight: 800; font-stretch: 80%; font-size: 1.5rem; line-height: 1.1; }
+  .step p { color: var(--field-soft); line-height: 1.55; max-width: 26rem; }
+
+  .tilt { transform: rotate(-3deg); margin-inline: 0.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}

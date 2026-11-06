@@ -1,0 +1,106 @@
+/* The cassette. Every measurement is in cqw (1% of the cassette's own width), so it scales cleanly.
+   The artwork is a 100 x 63.5 grid. Colors come from the data-tape variables in app.css. */
+
+.cassette { container-type: inline-size; position: relative; width: 100%; aspect-ratio: 100 / 63.5; --p: 0; }
+
+.cassette__body {
+  position: absolute; inset: 0;
+  border-radius: 3.6cqw;
+  background: var(--shell);
+  box-shadow: inset 0 -1.4cqw 0 var(--shell-deep), 0 2.2cqw 0 rgb(0 0 0 / 0.2);
+}
+.cassette__body::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: var(--dots); pointer-events: none;
+}
+
+.cassette__screw {
+  position: absolute; width: 3cqw; height: 3cqw; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f3f0e6, #a39d8b);
+  box-shadow: inset 0 0 0 0.3cqw rgb(0 0 0 / 0.25);
+}
+.cassette__screw::after {
+  content: ""; position: absolute; left: 20%; right: 20%; top: calc(50% - 0.2cqw); height: 0.4cqw;
+  background: rgb(0 0 0 / 0.4); transform: rotate(35deg);
+}
+.cassette__screw--tl { left: 2cqw; top: 2cqw; }
+.cassette__screw--tr { right: 2cqw; top: 2cqw; }
+.cassette__screw--bl { left: 2cqw; bottom: 2.4cqw; }
+.cassette__screw--br { right: 2cqw; bottom: 2.4cqw; }
+
+/* The label: a printed band on top, then ruled lines for the handwritten tracklist. */
+.cassette__label {
+  position: absolute; left: 7cqw; right: 7cqw; top: 4.6cqw; height: 37.2cqw;
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--color-paper); border-radius: 1.8cqw;
+  box-shadow: 0 0 0 0.5cqw rgb(0 0 0 / 0.1);
+}
+.cassette__stripe {
+  flex: none; height: 7.4cqw; padding: 0 2.4cqw;
+  display: flex; align-items: center; gap: 2.2cqw;
+  background: var(--shell-deep);
+}
+.cassette__side {
+  display: grid; place-items: center; width: 4.6cqw; height: 4.6cqw; border-radius: 1cqw;
+  background: var(--color-paper); color: var(--color-oxide);
+  font-weight: 900; font-size: 3.4cqw; line-height: 1;
+}
+.cassette__for {
+  max-width: 62cqw; padding: 0 2cqw; border-radius: 0.6cqw;
+  background: var(--color-masking); color: var(--color-oxide);
+  font-family: var(--font-hand); font-weight: 700; font-size: 4.4cqw; line-height: 5cqw;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transform: rotate(-1.4deg);
+}
+.cassette__tracks { list-style: none; margin: 0; padding: 0 2.6cqw; flex: 1; min-height: 0; }
+.cassette__tracks li {
+  height: 4.8cqw; line-height: 4.8cqw;
+  font-family: var(--font-hand); font-size: 4cqw; color: #23262e;
+  border-bottom: 0.25cqw solid rgb(58 42 33 / 0.2);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cassette__title { font-weight: 700; }
+.cassette__artist { margin-left: 1.2cqw; font-size: 0.9em; color: rgb(58 42 33 / 0.62); }
+
+/* The tape window. --p (0 to 1) is how far through the mixtape we are: tape moves from left to right. */
+.cassette__window {
+  position: absolute; left: 22cqw; width: 56cqw; top: 43.4cqw; height: 12.4cqw;
+  border-radius: 6.2cqw; overflow: hidden; background: #1d1511;
+  box-shadow: inset 0 0 0 0.6cqw rgb(255 255 255 / 0.12);
+}
+.cassette__window::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(115deg, rgb(255 255 255 / 0.14) 0 26%, transparent 27%);
+}
+.cassette__pack {
+  position: absolute; top: 6.2cqw; border-radius: 50%; background: #4a3426;
+  transform: translate(-50%, -50%);
+  box-shadow: inset 0 0 0 0.4cqw rgb(255 255 255 / 0.06);
+  transition: width 0.5s linear, height 0.5s linear;
+}
+.cassette__pack--left  { left: 14cqw; width: calc(7.4cqw + (1 - var(--p)) * 4.4cqw); height: calc(7.4cqw + (1 - var(--p)) * 4.4cqw); }
+.cassette__pack--right { left: 42cqw; width: calc(7.4cqw + var(--p) * 4.4cqw); height: calc(7.4cqw + var(--p) * 4.4cqw); }
+.cassette__reel { position: absolute; top: calc(6.2cqw - 3.3cqw); width: 6.6cqw; height: 6.6cqw; }
+.cassette__reel--left  { left: calc(14cqw - 3.3cqw); }
+.cassette__reel--right { left: calc(42cqw - 3.3cqw); }
+.is-playing .cassette__reel { animation: reel-spin 2.4s linear infinite; }
+@keyframes reel-spin { to { transform: rotate(-360deg); } }
+
+.cassette__foot {
+  position: absolute; left: 18cqw; width: 64cqw; bottom: 0; height: 6.6cqw;
+  background: var(--shell-deep); clip-path: polygon(7% 0, 93% 0, 100% 100%, 0 100%);
+}
+.cassette__foot i { position: absolute; top: 2.3cqw; background: #1d1511; }
+.cassette__foot i:nth-child(1) { left: 11%; width: 2.4cqw; height: 2.4cqw; border-radius: 50%; }
+.cassette__foot i:nth-child(2) { left: 36%; width: 1.7cqw; height: 2.2cqw; border-radius: 0.3cqw; }
+.cassette__foot i:nth-child(3) { right: 36%; width: 1.7cqw; height: 2.2cqw; border-radius: 0.3cqw; }
+.cassette__foot i:nth-child(4) { right: 11%; width: 2.4cqw; height: 2.4cqw; border-radius: 50%; }
+
+/* Stickers sit over the shell and are switched on by data-stickers="bow daisies". */
+.cassette__sticker {
+  position: absolute; display: none; pointer-events: none;
+  filter: drop-shadow(0 0.5cqw 0 rgb(0 0 0 / 0.2));
+}
+.cassette[data-stickers~="bow"] .cassette__sticker--bow { display: block; width: 18cqw; left: -3.4cqw; top: -4cqw; transform: rotate(-14deg); }
+.cassette[data-stickers~="daisies"] .cassette__sticker--daisies { display: block; width: 19cqw; right: -3cqw; bottom: -3.4cqw; transform: rotate(8deg); }
+.cassette[data-stickers~="sprig"] .cassette__sticker--sprig { display: block; width: 17cqw; left: 0.5cqw; bottom: -2.6cqw; transform: rotate(-6deg); }

@@ -1,0 +1,14 @@
+{
+  "name": "mixtape",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Make a mixtape for someone: pick YouTube songs, write a letter, share one link.",
+  "scripts": {
+    "build": "node scripts/build-css.mjs",
+    "watch": "node --watch-path=views --watch-path=resources --watch-path=public/assets/app.js --watch-path=public/assets/player.js scripts/build-css.mjs"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.1.0"
+  }
+}

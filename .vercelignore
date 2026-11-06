@@ -1,0 +1,15 @@
+# Files the deployed app does not need. (The app itself only reads src/, views/, api/ and public/.)
+.env
+.env.*
+node_modules
+tests
+scripts
+resources
+db
+package.json
+package-lock.json
+README.md
+
+# Front controller and Apache rules for ordinary servers. Vercel starts at api/index.php.
+public/index.php
+public/.htaccess

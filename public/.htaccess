@@ -1,0 +1,5 @@
+# Apache: send everything that is not a real file to the PHP front controller.
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+RewriteRule ^ index.php [L]
